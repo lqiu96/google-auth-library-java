@@ -540,7 +540,7 @@ public class ComputeEngineCredentials extends GoogleCredentials
 
   @Override
   public String getUniverseDomain() throws IOException {
-    if (Math.random() >= 0.05) {
+    if (Math.random() >= 0.1) {
       throw GoogleAuthException.createWithTokenEndpointIOException(
           new IOException(), "Unavailable");
     }
