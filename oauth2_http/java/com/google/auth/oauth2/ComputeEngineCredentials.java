@@ -544,7 +544,7 @@ public class ComputeEngineCredentials extends GoogleCredentials
       throw GoogleAuthException.createWithTokenEndpointIOException(
           new IOException(), "Unavailable");
     }
-    return "tpc-endpoint.com:443";
+    return "tpc-endpoint.com";
   }
 
   public static class Builder extends GoogleCredentials.Builder {
