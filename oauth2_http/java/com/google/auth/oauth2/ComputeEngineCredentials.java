@@ -538,6 +538,15 @@ public class ComputeEngineCredentials extends GoogleCredentials
     return OAuth2Utils.validateString(defaultAccount, "email", PARSE_ERROR_ACCOUNT);
   }
 
+  @Override
+  public String getUniverseDomain() throws IOException {
+    if (Math.random() >= 0.1) {
+      throw GoogleAuthException.createWithTokenEndpointIOException(
+          new IOException(), "Unavailable");
+    }
+    return "tpc-endpoint.com";
+  }
+
   public static class Builder extends GoogleCredentials.Builder {
     private HttpTransportFactory transportFactory;
     private Collection<String> scopes;

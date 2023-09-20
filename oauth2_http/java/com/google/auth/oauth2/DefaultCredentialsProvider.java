@@ -40,7 +40,6 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.security.AccessControlException;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -134,63 +133,64 @@ class DefaultCredentialsProvider {
     GoogleCredentials credentials = null;
     String credentialsPath = getEnv(CREDENTIAL_ENV_VAR);
     if (credentialsPath != null && credentialsPath.length() > 0) {
-      LOGGER.log(
-          Level.FINE,
-          String.format("Attempting to load credentials from file: %s", credentialsPath));
-      InputStream credentialsStream = null;
-      try {
-        File credentialsFile = new File(credentialsPath);
-        if (!isFile(credentialsFile)) {
-          // Path will be put in the message from the catch block below
-          throw new IOException("File does not exist.");
-        }
-        credentialsStream = readStream(credentialsFile);
-        credentials = GoogleCredentials.fromStream(credentialsStream, transportFactory);
-      } catch (IOException e) {
-        // Although it is also the cause, the message of the caught exception can have very
-        // important information for diagnosing errors, so include its message in the
-        // outer exception message also.
-        throw new IOException(
-            String.format(
-                "Error reading credential file from environment variable %s, value '%s': %s",
-                CREDENTIAL_ENV_VAR, credentialsPath, e.getMessage()),
-            e);
-      } catch (AccessControlException expected) {
-        // Exception querying file system is expected on App-Engine
-      } finally {
-        if (credentialsStream != null) {
-          credentialsStream.close();
-        }
-      }
+      //      LOGGER.log(
+      //          Level.FINE,
+      //          String.format("Attempting to load credentials from file: %s", credentialsPath));
+      //      InputStream credentialsStream = null;
+      //      try {
+      //        File credentialsFile = new File(credentialsPath);
+      //        if (!isFile(credentialsFile)) {
+      //          // Path will be put in the message from the catch block below
+      //          throw new IOException("File does not exist.");
+      //        }
+      //        credentialsStream = readStream(credentialsFile);
+      //        credentials = GoogleCredentials.fromStream(credentialsStream, transportFactory);
+      //      } catch (IOException e) {
+      //        // Although it is also the cause, the message of the caught exception can have very
+      //        // important information for diagnosing errors, so include its message in the
+      //        // outer exception message also.
+      //        throw new IOException(
+      //            String.format(
+      //                "Error reading credential file from environment variable %s, value '%s':
+      // %s",
+      //                CREDENTIAL_ENV_VAR, credentialsPath, e.getMessage()),
+      //            e);
+      //      } catch (AccessControlException expected) {
+      //        // Exception querying file system is expected on App-Engine
+      //      } finally {
+      //        if (credentialsStream != null) {
+      //          credentialsStream.close();
+      //        }
+      //      }
     }
 
     // Then try the well-known file
     if (credentials == null) {
-      File wellKnownFileLocation = getWellKnownCredentialsFile();
-      InputStream credentialsStream = null;
-      try {
-        if (isFile(wellKnownFileLocation)) {
-          LOGGER.log(
-              Level.FINE,
-              String.format(
-                  "Attempting to load credentials from well known file: %s",
-                  wellKnownFileLocation.getCanonicalPath()));
-          credentialsStream = readStream(wellKnownFileLocation);
-          credentials = GoogleCredentials.fromStream(credentialsStream, transportFactory);
-        }
-      } catch (IOException e) {
-        throw new IOException(
-            String.format(
-                "Error reading credential file from location %s: %s",
-                wellKnownFileLocation, e.getMessage()));
-      } catch (AccessControlException expected) {
-        // Exception querying file system is expected on App-Engine
-      } finally {
-        if (credentialsStream != null) {
-          credentialsStream.close();
-        }
-      }
-      warnAboutProblematicCredentials(credentials);
+      //      File wellKnownFileLocation = getWellKnownCredentialsFile();
+      //      InputStream credentialsStream = null;
+      //      try {
+      //        if (isFile(wellKnownFileLocation)) {
+      //          LOGGER.log(
+      //              Level.FINE,
+      //              String.format(
+      //                  "Attempting to load credentials from well known file: %s",
+      //                  wellKnownFileLocation.getCanonicalPath()));
+      //          credentialsStream = readStream(wellKnownFileLocation);
+      //          credentials = GoogleCredentials.fromStream(credentialsStream, transportFactory);
+      //        }
+      //      } catch (IOException e) {
+      //        throw new IOException(
+      //            String.format(
+      //                "Error reading credential file from location %s: %s",
+      //                wellKnownFileLocation, e.getMessage()));
+      //      } catch (AccessControlException expected) {
+      //        // Exception querying file system is expected on App-Engine
+      //      } finally {
+      //        if (credentialsStream != null) {
+      //          credentialsStream.close();
+      //        }
+      //      }
+      //      warnAboutProblematicCredentials(credentials);
     }
 
     // Then try GAE 7 standard environment
@@ -295,7 +295,8 @@ class DefaultCredentialsProvider {
     if (checkedComputeEngine) {
       return null;
     }
-    boolean runningOnComputeEngine = ComputeEngineCredentials.isOnGce(transportFactory, this);
+    boolean runningOnComputeEngine = true;
+    //    boolean runningOnComputeEngine = ComputeEngineCredentials.isOnGce(transportFactory, this);
     checkedComputeEngine = true;
     if (runningOnComputeEngine) {
       return ComputeEngineCredentials.newBuilder()

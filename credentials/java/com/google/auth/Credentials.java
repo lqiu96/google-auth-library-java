@@ -166,4 +166,8 @@ public abstract class Credentials implements Serializable {
    * @throws IOException if there was an error getting up-to-date access.
    */
   public abstract void refresh() throws IOException;
+
+  public String getUniverseDomain() throws IOException {
+    return "custom-endpoint:443";
+  }
 }
