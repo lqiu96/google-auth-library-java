@@ -127,6 +127,10 @@ class DefaultCredentialsProvider {
     throw new IOException(CLOUDSDK_MISSING_CREDENTIALS);
   }
 
+  final GoogleCredentials getDefaultCredentialsUncached() throws IOException {
+    return getDefaultCredentialsUnsynchronized(OAuth2Utils.HTTP_TRANSPORT_FACTORY);
+  }
+
   private final GoogleCredentials getDefaultCredentialsUnsynchronized(
       HttpTransportFactory transportFactory) throws IOException {
 
