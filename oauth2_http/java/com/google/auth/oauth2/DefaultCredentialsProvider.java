@@ -117,7 +117,7 @@ class DefaultCredentialsProvider {
       throws IOException {
     synchronized (this) {
       if (cachedCredentials == null) {
-        cachedCredentials = getDefaultCredentialsUncached(transportFactory);
+        cachedCredentials = getDefaultCredentialsUnsynchronized(transportFactory);
       }
       if (cachedCredentials != null) {
         return cachedCredentials;
@@ -127,8 +127,8 @@ class DefaultCredentialsProvider {
     throw new IOException(CLOUDSDK_MISSING_CREDENTIALS);
   }
 
-  final GoogleCredentials getDefaultCredentialsUncached(HttpTransportFactory transportFactory) throws IOException {
-    return getDefaultCredentialsUnsynchronized(transportFactory);
+  final GoogleCredentials getDefaultCredentialsUncached() throws IOException {
+    return getDefaultCredentialsUnsynchronized(OAuth2Utils.HTTP_TRANSPORT_FACTORY);
   }
 
   private final GoogleCredentials getDefaultCredentialsUnsynchronized(

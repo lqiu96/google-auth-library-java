@@ -19,7 +19,7 @@ public class RefreshingGoogleCredentials extends OAuth2Credentials {
     // Expect that user/ service initializing RefreshingGoogleCredentials takes care of
     // lifecycle of the ScheduledExecutorService
     public RefreshingGoogleCredentials(ScheduledExecutorService executorService, long refreshTime, TimeUnit unit) throws IOException {
-        this.delegate = defaultCredentialsProvider.getDefaultCredentialsUncached(OAuth2Utils.HTTP_TRANSPORT_FACTORY);
+        this.delegate = defaultCredentialsProvider.getDefaultCredentialsUncached();
         executorService.schedule(() -> {
             try {
                 refreshADC();
@@ -66,7 +66,7 @@ public class RefreshingGoogleCredentials extends OAuth2Credentials {
     void refreshADC() throws IOException {
         // Since this is uncached, we invoke this without retrieving cached result
         // Ideally, runs on a background thread so it doesn't block any outbound network requests
-        GoogleCredentials newCredential = defaultCredentialsProvider.getDefaultCredentialsUncached(OAuth2Utils.HTTP_TRANSPORT_FACTORY);
+        GoogleCredentials newCredential = defaultCredentialsProvider.getDefaultCredentialsUncached();
         // Only lock when assigning the new GoogleCredential
         synchronized (lock) {
             this.delegate = newCredential;
