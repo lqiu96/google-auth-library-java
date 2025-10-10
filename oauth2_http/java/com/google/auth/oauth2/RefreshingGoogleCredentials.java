@@ -20,14 +20,14 @@ public class RefreshingGoogleCredentials extends OAuth2Credentials {
     // lifecycle of the ScheduledExecutorService
     public RefreshingGoogleCredentials(ScheduledExecutorService executorService, long refreshTime, TimeUnit unit) throws IOException {
         this.delegate = defaultCredentialsProvider.getDefaultCredentialsUncached();
-        executorService.schedule(() -> {
+        executorService.scheduleAtFixedRate(() -> {
             try {
                 refreshADC();
             } catch (IOException e) {
                 // Option: Opt to no-op on refresh failure. This will use the existing GoogleCredential and won't break
                 // user code? Log a warning so that this doesn't silently fail?
             }
-        }, refreshTime, unit);
+        }, refreshTime, refreshTime, unit);
     }
 
     // For gRPC: GoogleAuthCallCredentials (subclass of CallCredentials) is created
